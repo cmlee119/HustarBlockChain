@@ -3,10 +3,10 @@
 
 <head>
 	<meta charset="UTF-8">
-	<script type="text/javascript" src="/js/bignumber.min.js"></script>
-	<script type="text/javascript" src="/js/web3-light.js"></script>
-	<script type="text/javascript" src="/js/ABI.js"></script>
-	<script type="text/javascript" src="/js/CA.js"></script>
+	<script type="text/javascript" src="./js/bignumber.min.js"></script>
+	<script type="text/javascript" src="./js/web3-light.js"></script>
+	<script type="text/javascript" src="./js/ABI.js"></script>
+	<script type="text/javascript" src="./js/CA.js"></script>
 	<script type="text/javascript">
 //어렵다
 		console.log('starting...');
@@ -24,7 +24,7 @@
 			console.log("not connected")
 		}
 		var vc = web3.eth.contract(abi).at(CA);
-		///asdfasdf
+
 		//크리에이트 어카운트
 		/*function CreateAccount() {
 			var strName = document.getElementById("name").value;
@@ -70,7 +70,7 @@
 		}
 		
 		//책 대출하기
-		/*function BookLoan() {
+		function BookLoan() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
 			
@@ -91,43 +91,60 @@
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookHistory(address, strBookID, 1, { from: account, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
-		}*/
+		}
 
 		//도서목록보기
 		function showList() {
+		
 			//도서 목록 저장용 배열
 			var listBook = new Array();
 			
 			//도서 목록을 배열에 담는다.
 			var length = vc.getNumOfBooks();
+			console.log("showList().length : " + length);
+			
 			for (var i = 0; i < length; i++) {
-				var book = vc.getBookStruck(i);
+				var book = vc.getbookStruct(i);
 				listBook[i] = book;
 			}
 			
 			//각 책별로 최종적으로 대출인지 반납인지 검새한다.
+			
 			var length = vc.getNumOfBookHistory();
 			for (var i = length-1; i >= 0; i--) {
-				
 				var bookHistory = vc.getBookHistoryStruck(i);
-				
+				for(var j = 0; j < length; j++) {
+					var book = listBook[i];
+					
+				}
 			}
+			
 			
 			//완성된 배열을 화면에 표시한다.
 			var table = document.getElementById("tableBook");
 			for (var i = 0; i < length; i++) {
 				var book = listBook[i];
-			
+				var row = table.insertRow();
 				//책 아이디
 				row.insertCell(0).innerHTML = book[0];
 				//책 이름
 				row.insertCell(1).innerHTML = book[1];
-				//대출한 사람 이름
-				//row.insertCell(2).innerHTML = book[2];
-				//대출일
-				//row.insertCell(3).innerHTML = book[3];
+				//작가
+				row.insertCell(2).innerHTML = book[2];
+				//출판사
+				row.insertCell(3).innerHTML = book[3];
 				//반납예정일
-				//row.insertCell(4).innerHTML = book[4];
+				row.insertCell(4).innerHTML = book[4];
+			}
+		}
+		function AddBook() {
+			var strAddress = document.getElementById("address").value;
+			var strPassword = document.getElementById("password").value;
+			
+			var strBookID = document.getElementById("TempbookID").value;
+			
+			if (web3.personal.unlockAccount(strAddress, strPassword)) {
+				vc.addBookStru(strBookID, strBookID, "작가" + strBookID, "출판사" + strBookID, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
 		}
 		/*
@@ -174,7 +191,7 @@
 		<br>
 		-->
 		(입출력)지갑주소:
-		<input type="text" id="address" value="지갑주소">
+		<input type="text" id="address" value="0x7ca35e6077ecbda97a021d150e2430631ae53e12">
 		<br>
 		(입력)패스워드:
 		<input type="password" id="password" value="eth">
@@ -196,17 +213,37 @@
 	<br>
 	<br>
 	<br>
-	<!--<button onClick="BookLoan()">도서대출</button>-->
-	<!--<button onClick="BookReturn()">도서반납</button>-->
+
 	<br>
 	도서목록 시작
-	<br>
-	<br>
-	<br>
-	<table id="tableBook" />
+	<table id="tableBook" /><br>
 	도서목록 끝
 	<br>
-	<!--<table id="tableBookHistory" />-->
+
+	테스트용 책 등록하기 (책 이름겸 아이디)
+	<input type="text" id="TempbookID" value="책1">
+	<button onClick="AddBook()">책 등록</button>
+	<br>
+	<br>
+	<br>
+	테스트용 책 대출,반납하기
+	<br>
+	책 ID
+	<input type="text" id="TargetBookID" value="책1">
+	<button onClick="BookLoan()">BookLoan</button>
+	<button onClick="BookReturn()">BookReturn</button>
+	
+	<br>
+	<br>
+	<br>
+	
+	도서대출이력 시작
+	<table id="tableBookHistory" /><br>
+	도서대출이력 끝
+	
+	<br>
+	<br>
+	<br>
 	
 	<script>
 		showList();
