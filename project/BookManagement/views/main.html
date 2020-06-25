@@ -1,0 +1,215 @@
+<!Doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="/js/bignumber.min.js"></script>
+	<script type="text/javascript" src="/js/web3-light.js"></script>
+	<script type="text/javascript" src="/js/ABI.js"></script>
+	<script type="text/javascript">
+
+		console.log('starting...');
+		//connect web3 and check if web3 is connected correctly
+		if (typeof web3 !== 'undefined') {
+			web3 = new Web3(web3.currentProvider);
+		} else {
+			// set the provider you want from Web3.providers
+			web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+		}
+
+		if (web3.isConnected()) {
+			console.log("connected");
+		} else {
+			console.log("not connected")
+		}
+		var vc = web3.eth.contract(ABI).at("0x1da3e10eeb29c28ff002896546cfd365552689a1");
+
+		//크리에이트 어카운트
+		/*function CreateAccount() {
+			var strName = document.getElementById("name").value;
+			var strPassword = document.getElementById("password").value;
+			
+			var bSuccess = vc.CreateAccount(strName, strPassword);
+			console.log(bSuccess);
+		}*/
+		
+		//이름에 대한 주소가 있는지 묻는다.
+		/*function CheckName() {
+			var strName = document.getElementById("name").value;
+			
+			var strAddress = vc.CheckName(name)
+			console.log(strAddress);
+			
+			if(strAddress == "")
+			{
+				document.getElementById("address").value = "찾을 수 없습니다";
+			}
+			else
+			{
+				document.getElementById("address").value = strAddress;
+			}
+		}*/
+		
+		//주소와 비밀번호가 있는지 확인한다.
+		function Login() {
+			var strAddress = document.getElementById("address").value;
+			var strPassword = document.getElementById("password").value;
+			
+			var login = vc.Login(strAddress, strPassword);
+			console.log(login);
+			
+			if(login == true)
+			{
+				document.getElementById("IsLogin").value = "로그인 성공";
+			}
+			else
+			{
+				document.getElementById("IsLogin").value = "로그인 실패";
+			}
+		}
+		
+		//책 대출하기
+		/*function BookLoan() {
+			var strAddress = document.getElementById("address").value;
+			var strPassword = document.getElementById("password").value;
+			
+			var strBookID = document.getElementById("bookID").value;
+			
+			if (web3.personal.unlockAccount(strAddress, strPassword)) {
+				vc.addBookHistory(address, strBookID, 0, { from: account, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+			}
+		}
+		
+		//책 반납하기
+		function BookReturn() {
+			var strAddress = document.getElementById("address").value;
+			var strPassword = document.getElementById("password").value;
+			
+			var strBookID = document.getElementById("bookID").value;
+			
+			if (web3.personal.unlockAccount(strAddress, strPassword)) {
+				vc.addBookHistory(address, strBookID, 1, { from: account, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+			}
+		}*/
+
+		//도서목록보기
+		function showList() {
+			//도서 목록 저장용 배열
+			var listBook = new Array();
+			
+			//도서 목록을 배열에 담는다.
+			var length = vc.getNumOfBooks();
+			for (var i = 0; i < length; i++) {
+				var book = vc.getBookStruck(i);
+				listBook[i] = book;
+			}
+			
+			//각 책별로 최종적으로 대출인지 반납인지 검새한다.
+			var length = vc.getNumOfBookHistory();
+			for (var i = length-1; i >= 0; i--) {
+				
+				var bookHistory = vc.getBookHistoryStruck(i);
+				
+			}
+			
+			//완성된 배열을 화면에 표시한다.
+			var table = document.getElementById("tableBook");
+			for (var i = 0; i < length; i++) {
+				var book = listBook[i];
+			
+				//책 아이디
+				row.insertCell(0).innerHTML = book[0];
+				//책 이름
+				row.insertCell(1).innerHTML = book[1];
+				//대출한 사람 이름
+				//row.insertCell(2).innerHTML = book[2];
+				//대출일
+				//row.insertCell(3).innerHTML = book[3];
+				//반납예정일
+				//row.insertCell(4).innerHTML = book[4];
+			}
+		}
+		/*
+		function newAc() {
+			var account = web3.personal.newAccount(document.getElementById('pass').value);
+			console.log(account);
+		}
+		*/
+
+	</script>
+	<style>
+		table {
+			border-collapse: collapse;
+			border: 4px solid #bbb;
+			width: 50%;
+		}
+
+		tr:nth-child(even) {
+			background-color: #ccc
+		}
+
+		input,
+		select {
+			padding: 6px 10px;
+			margin: 4px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 3px;
+			box-sizing: border-box;
+		}
+
+		button:hover {
+			background-color: gold;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>이력 관리 시스템</h1>
+	<div>
+		<!--
+		(입력)로그인용 이름:
+		<input type="text" id="name" value="이름">
+		<br>
+		-->
+		(입출력)지갑주소:
+		<input type="text" id="address" value="지갑주소">
+		<br>
+		(입력)패스워드:
+		<input type="password" id="password" value="eth">
+		<br>
+		<!--<button onClick="CreateAccount()">계정 생성</button>-->
+		<!--<button onClick="CheckName()">이름에 대한 지갑주소 묻기</button>-->
+		<button onClick="Login()">로그인</button>
+		<br>
+		(출력)로그인성공여부표시:
+		<input type="text" id="IsLogin" value="로그인확인용">
+	</div>
+	<br>
+	<br>
+	<br>
+	<div>
+		(입력)빌리거나 대출할 도서ID:
+		<input type="text" id="bookID" value="도서ID">
+	</div>
+	<br>
+	<br>
+	<br>
+	<!--<button onClick="BookLoan()">도서대출</button>-->
+	<!--<button onClick="BookReturn()">도서반납</button>-->
+	<br>
+	도서목록 시작
+	<br>
+	<br>
+	<br>
+	<table id="tableBook" />
+	도서목록 끝
+	<br>
+	<!--<table id="tableBookHistory" />-->
+	
+	<script>
+		showList();
+	</script>
+</body>
+
+</html>
