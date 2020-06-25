@@ -124,14 +124,16 @@
 				//대출일
 				row.insertCell(2).innerHTML = new Date(bookHistory[2]*1000);
 				//플래그(대출, 반납)
-				row.insertCell(3).innerHTML = bookHistory[3];
-				
-				
-				
-				for(var j = 0; j < lengthHistory; j++) {
-					//var book = listBook[i];
-					
+				var strTemp;
+				if(bookHistory[3] == 0)
+				{
+					strTemp = "대출";
 				}
+				else
+				{
+					strTemp = "반납";
+				}
+				row.insertCell(3).innerHTML = strTemp;
 			}
 			
 			
@@ -150,6 +152,11 @@
 				row.insertCell(3).innerHTML = book[3];
 				//반납예정일
 				row.insertCell(4).innerHTML = book[4];
+				
+				for(var i = lengthHistory-1; i >= 0; i--)
+				{
+					
+				}
 			}
 		}
 		function AddBook() {
