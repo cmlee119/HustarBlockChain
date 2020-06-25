@@ -1,4 +1,87 @@
-body{
-	background-color: black;
-	color: white;
+body {
+	margin-left: 20px;
+}
+
+tr:nth-child(even) {
+	background-color: #ccc
+}
+
+input,
+select {
+	padding: 6px 10px;
+	margin: 4px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	box-sizing: border-box;
+}
+
+button:hover {
+	background-color: gold;
+}
+
+
+.tg {
+	border-collapse: collapse;
+	border-color: #ccc;
+	border-spacing: 0;
+}
+
+.tg td {
+	background-color: #fff;
+	border-color: #ccc;
+	border-style: solid;
+	border-width: 1px;
+	color: #333;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	overflow: hidden;
+	padding: 10px 5px;
+	word-break: normal;
+}
+
+.tg th {
+	background-color: #f0f0f0;
+	border-color: #ccc;
+	border-style: solid;
+	border-width: 1px;
+	color: #333;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	overflow: hidden;
+	padding: 10px 5px;
+	word-break: normal;
+}
+
+.tg .tg-nb2d {
+	border-color: inherit;
+	font-size: 100%;
+	text-align: center;
+	vertical-align: top
+}
+
+.tg .tg-baqh {
+	text-align: center;
+	vertical-align: top
+}
+
+.tg .tg-p7qa {
+	border-color: inherit;
+	font-size: 100%;
+	position: -webkit-sticky;
+	position: sticky;
+	text-align: center;
+	top: -1px;
+	vertical-align: top;
+	will-change: transform
+}
+
+.tg .tg-rz9m {
+	position: -webkit-sticky;
+	position: sticky;
+	text-align: center;
+	top: -1px;
+	vertical-align: top;
+	will-change: transform
 }
