@@ -29,18 +29,18 @@
 		/*function CreateAccount() {
 			var strName = document.getElementById("name").value;
 			var strPassword = document.getElementById("password").value;
-
+			
 			var bSuccess = vc.CreateAccount(strName, strPassword);
 			console.log(bSuccess);
 		}*/
-
+		
 		//이름에 대한 주소가 있는지 묻는다.
 		/*function CheckName() {
 			var strName = document.getElementById("name").value;
-
+			
 			var strAddress = vc.CheckName(name)
 			console.log(strAddress);
-
+			
 			if(strAddress == "")
 			{
 				document.getElementById("address").value = "찾을 수 없습니다";
@@ -50,42 +50,44 @@
 				document.getElementById("address").value = strAddress;
 			}
 		}*/
-
+		
 		//주소와 비밀번호가 있는지 확인한다.
 		function Login() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
-
+			
 			var login = vc.Login(strAddress, strPassword);
 			console.log(login);
-
-			if (login == true) {
+			
+			if(login == true)
+			{
 				document.getElementById("IsLogin").value = "로그인 성공";
 			}
-			else {
+			else
+			{
 				document.getElementById("IsLogin").value = "로그인 실패";
 			}
 		}
-
+		
 		//책 대출하기
 		function BookLoan() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
-
+			
 			var strBookID = document.getElementById("bookID").value;
-
+			
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookHistory(strAddress, strBookID, 0, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
 		}
-
+		
 		//책 반납하기
 		function BookReturn() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
-
+			
 			var strBookID = document.getElementById("bookID").value;
-
+			
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookHistory(strAddress, strBookID, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
@@ -93,27 +95,28 @@
 
 		//도서목록보기
 		function showList() {
-
+		
 			//도서 목록 저장용 배열
 			var listBook = new Array();
-
+			
 			//도서 목록을 배열에 담는다.
 			var lengthBook = vc.getNumOfBooks();
 			console.log("showList().length : " + lengthBook);
-
+			
 			for (var i = 0; i < lengthBook; i++) {
 				var book = vc.getbookStruct(i);
 				listBook[i] = book;
 			}
-
+			
 			//각 책별로 최종적으로 대출인지 반납인지 검새한다.
 			var tableHistory = document.getElementById("tableBookHistory");
 			var lengthHistory = vc.getNumOfBookHistory();
+			console.log("lengthHistory().length : " + lengthHistory);
 			for (var i = lengthHistory-1; i >= 0; i--) {
 				var bookHistory = vc.getBookHistoryStruct(i);
 				
 				//대출이력 화면 표시부분
-				var row = table.insertRow();
+				var row = tableHistory.insertRow();
 				//책 아이디
 				row.insertCell(0).innerHTML = bookHistory[0];
 				//대출자 Address
@@ -126,12 +129,12 @@
 				
 				
 				for(var j = 0; j < lengthHistory; j++) {
-					var book = listBook[i];
-
+					//var book = listBook[i];
+					
 				}
 			}
-
-
+			
+			
 			//완성된 배열을 화면에 표시한다.
 			var table = document.getElementById("tableBook");
 			for (var i = 0; i < lengthBook; i++) {
@@ -152,9 +155,9 @@
 		function AddBook() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
-
+			
 			var strBookID = document.getElementById("TempbookID").value;
-
+			
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookStru(strBookID, strBookID, "작가" + strBookID, "출판사" + strBookID, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
