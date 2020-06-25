@@ -9,7 +9,6 @@
 	<script type="text/javascript" src="./js/ABI.js"></script>
 	<script type="text/javascript" src="./js/CA.js"></script>
 	<script type="text/javascript">
-		//어렵다
 		console.log('starting...');
 		//connect web3 and check if web3 is connected correctly
 		if (typeof web3 !== 'undefined') {
@@ -76,7 +75,7 @@
 			var strBookID = document.getElementById("bookID").value;
 
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
-				vc.addBookHistory(address, strBookID, 0, { from: account, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+				vc.addBookHistory(strAddress, strBookID, 0, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
 		}
 
@@ -88,7 +87,7 @@
 			var strBookID = document.getElementById("bookID").value;
 
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
-				vc.addBookHistory(address, strBookID, 1, { from: account, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+				vc.addBookHistory(strAddress, strBookID, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
 		}
 
@@ -99,20 +98,34 @@
 			var listBook = new Array();
 
 			//도서 목록을 배열에 담는다.
-			var length = vc.getNumOfBooks();
-			console.log("showList().length : " + length);
+			var lengthBook = vc.getNumOfBooks();
+			console.log("showList().length : " + lengthBook);
 
-			for (var i = 0; i < length; i++) {
+			for (var i = 0; i < lengthBook; i++) {
 				var book = vc.getbookStruct(i);
 				listBook[i] = book;
 			}
 
 			//각 책별로 최종적으로 대출인지 반납인지 검새한다.
-
-			var length = vc.getNumOfBookHistory();
-			for (var i = length - 1; i >= 0; i--) {
-				var bookHistory = vc.getBookHistoryStruck(i);
-				for (var j = 0; j < length; j++) {
+			var tableHistory = document.getElementById("tableBookHistory");
+			var lengthHistory = vc.getNumOfBookHistory();
+			for (var i = lengthHistory-1; i >= 0; i--) {
+				var bookHistory = vc.getBookHistoryStruct(i);
+				
+				//대출이력 화면 표시부분
+				var row = table.insertRow();
+				//책 아이디
+				row.insertCell(0).innerHTML = bookHistory[0];
+				//대출자 Address
+				row.insertCell(1).innerHTML = bookHistory[1];
+				//대출일
+				row.insertCell(2).innerHTML = new Date(bookHistory[2]*1000);
+				//플래그(대출, 반납)
+				row.insertCell(3).innerHTML = bookHistory[3];
+				
+				
+				
+				for(var j = 0; j < lengthHistory; j++) {
 					var book = listBook[i];
 
 				}
@@ -121,7 +134,7 @@
 
 			//완성된 배열을 화면에 표시한다.
 			var table = document.getElementById("tableBook");
-			for (var i = 0; i < length; i++) {
+			for (var i = 0; i < lengthBook; i++) {
 				var book = listBook[i];
 				var row = table.insertRow();
 				//책 아이디
