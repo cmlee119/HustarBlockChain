@@ -6,6 +6,7 @@
 	<script type="text/javascript" src="/js/bignumber.min.js"></script>
 	<script type="text/javascript" src="/js/web3-light.js"></script>
 	<script type="text/javascript" src="/js/ABI.js"></script>
+	<script type="text/javascript" src="/js/CA.js"></script>
 	<script type="text/javascript">
 //어렵다
 		console.log('starting...');
@@ -22,7 +23,7 @@
 		} else {
 			console.log("not connected")
 		}
-		var vc = web3.eth.contract(ABI).at("0x1da3e10eeb29c28ff002896546cfd365552689a1");
+		var vc = web3.eth.contract(abi).at(CA);
 		///asdfasdf
 		//크리에이트 어카운트
 		/*function CreateAccount() {
