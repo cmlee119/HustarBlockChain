@@ -116,7 +116,7 @@
 				var book = vc.getbookStruct(i);
 				listBook[i] = book;
 			}
-			
+			/*
             listBook = ["test, 사이킷런, 텐서플로", "HS01012", "세바스찬", "길벗", "2020-06-27"]
 
 			//각 책별로 최종적으로 대출인지 반납인지 검색한다.
@@ -146,33 +146,35 @@
 				}
 				row.insertCell(3).innerHTML = strTemp;
 			}
-			
+			*/
 			
 			//완성된 배열을 화면에 표시한다.
 			var table = document.getElementById("tableBook");
 			for (var i = 0; i < lengthBook; i++) {
 				var book = listBook[i];
 				var row = table.insertRow(1);
-				//책 아이디
-				row.insertCell(0).innerHTML = book[0];
+				//책 순서
+				row.insertCell(0).innerHTML = i + 1;
 				//책 이름
-				row.insertCell(1).innerHTML = book[1];
+				row.insertCell(1).innerHTML = book[0];
+				//책 아이디
+				row.insertCell(2).innerHTML = book[1];
 				//작가
-				row.insertCell(2).innerHTML = book[2];
+				row.insertCell(3).innerHTML = book[2];
 				//출판사
-				row.insertCell(3).innerHTML = book[3];
-				//반납예정일
-				row.insertCell(4).innerHTML = book[4];
+				row.insertCell(4).innerHTML = book[3];
 				
-				for(var i = lengthHistory-1; i >= 0; i--)
+				/*for(var i = lengthHistory-1; i >= 0; i--)
 				{
 					
-				}
+				}*/
 			}
 		}
 		function AddBook() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
+			console.log(strAddress);
+			console.log(strPassword);
 			
 			var strBookID = document.getElementById("TempbookID").value;
 			
@@ -193,7 +195,7 @@
 	<h1>Welcome, This is Hustar Library.</h1>
 	<div id="nameContainer">
 		(입출력)My name is
-		<input type="text" id="address" value="지갑주소">
+		<input type="text" id="address" value="0x9cff0442793c48e86a0d01534b85237f5428d1b0">
 		<br>
 	</div>
 	<div id="passwordContainer">
@@ -222,7 +224,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<!--<tr>
 					<td class="tg-nb2d"><input type="radio" name="chk_info" value="1"> 1</td>
 					<td class="tg-nb2d">머신러닝 교과서 with 파이썬, 사이킷런, 텐서플로</td>
 					<td class="tg-nb2d">HS01012</td>
@@ -231,7 +233,7 @@
 					<td class="tg-baqh">대출불가</td>
 					<td class="tg-baqh">김영인</td>
 					<td class="tg-baqh">2020-07-10</td>
-				</tr>
+				</tr>-->
 			</tbody>
 		</table>
 	</div>
