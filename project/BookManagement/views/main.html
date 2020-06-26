@@ -84,7 +84,7 @@
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
 			
-			var strBookID = document.getElementById("bookID").value;
+			var strBookID = document.getElementById("LoanBookID").value;
 			
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookHistory(strAddress, strBookID, 0, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
@@ -96,7 +96,7 @@
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
 			
-			var strBookID = document.getElementById("bookID").value;
+			var strBookID = document.getElementById("returnBookID").value;
 			
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookHistory(strAddress, strBookID, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
@@ -266,8 +266,7 @@
 	</div>
 	<div id="checkOutContainer">
 		<br>
-		<span>책 제목 / 도서 ID / 지은이 / 출판사</span>
-		<input type="text" id="bookID" value="도서ID">
+		<input type="text" id="LoanBookID" value="도서ID">
 		<button onclick="BookLoan()">대출하기</button>
 	</div>
 	<div id="myBooksContainer">
@@ -299,7 +298,7 @@
 	</div>
 	<div id="checkInContainer">
 		<br>
-		<span>책 제목 / 도서 ID / 지은이 / 출판사</span>
+		<input type="text" id="ReturnBookID" value="도서ID">
 		<button onclick="BookReturn()">반납하기</button>
 	</div>
 	<div id="BookHistoryContainer">
