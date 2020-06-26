@@ -159,13 +159,13 @@
 				row.insertCell(1).innerHTML = GetBookNameByID(bookHistory[0]);
 				//도서ID
 				row.insertCell(2).innerHTML = bookHistory[0];
-				
+				//대출자
 				row.insertCell(3).innerHTML = bookHistory[1];
 				
 				var RoanDate = new Date(bookHistory[2]*1000);
-				
+				//대출일
 				row.insertCell(4).innerHTML = RoanDate.toLocaleString();
-				
+				//상태
 				row.insertCell(5).innerHTML = GetReturnDate(RoanDate).toLocaleString();
 			}
 			
@@ -370,7 +370,7 @@
 					<th class="tg-p7qa">도서 ID</th>
 					<th class="tg-p7qa">대출자</th>
 					<th class="tg-rz9m">대출일</th>
-					<th class="tg-rz9m">반납일</th>
+					<th class="tg-rz9m">상태</th>
 				</tr>
 			</thead>
 			<tbody>
