@@ -53,6 +53,7 @@
 		}*/
 		
 		//주소와 비밀번호가 있는지 확인한다.
+
 		function Login() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
@@ -91,7 +92,12 @@
 			var strBookID = document.getElementById("LoanBookID").value;
 			
 			console.log(strBookID);
-			
+
+			if (false == IsBook(strBookID)) {
+                alert("이거책 아닙니다.")
+                return;
+            }
+
 			if(null != IsLoanBook(strBookID))
 			{
 				alert("이미 대출중인 책입니다.")
@@ -111,7 +117,12 @@
 			var strBookID = document.getElementById("returnBookID").value;
 			
 			console.log(strBookID);
-			
+
+            if (false == IsBook(strBookID)) {
+                alert("이거책 아닙니다.")
+                return;
+			}
+
 			var book = IsLoanBook(strBookID);
 			if(null == book)
 			{
@@ -125,9 +136,9 @@
 				return;
 			}
 			
-			//if (web3.personal.unlockAccount(strAddress, strPassword)) {
-			//	vc.addBookHistory(strBookID, strAddress, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
-			//}
+			if (web3.personal.unlockAccount(strAddress, strPassword)) {
+				vc.addBookHistory(strBookID, strAddress, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+			}
 		}
 
 		//도서목록보기
@@ -138,12 +149,11 @@
 			for (var i = 0; i < lengthBook; i++) {
 				listBook[i] = vc.getbookStruct(i);
 			}
-			
-            //listBook = [["test", "HS01012", "세바스찬", "길벗", "2020-06-27"],]
+
 
 			//각 책별로 최종적으로 대출인지 반납인지 검색한다.
 			var lengthHistory = vc.getNumOfBookHistory();
-			console.log("lengthHistory().length : " + lengthHistory)
+			console.log(lengthHistory);
 			for (var i = 0; i < lengthHistory; i++) {
 				listBookHistory[i] = vc.getBookHistoryStruct(i);
 			}
@@ -152,78 +162,124 @@
             for (var i = 0; i < lengthHistory ; i++) {
 				var bookHistory = listBookHistory[i];
 				//대출이력 화면 표시부분
-				var row = tableHistory.insertRow();
+				var historyRow = tableHistory.insertRow();
 				//순서
-				row.insertCell(0).innerHTML = i;
+				historyRow.insertCell(0).innerHTML = i;
 				//도서명
-				row.insertCell(1).innerHTML = GetBookNameByID(bookHistory[0]);
+				historyRow.insertCell(1).innerHTML = GetBookNameByID(bookHistory[0]);
 				//도서ID
-				row.insertCell(2).innerHTML = bookHistory[0];
+				historyRow.insertCell(2).innerHTML = bookHistory[0];
 				//대출자
-				row.insertCell(3).innerHTML = bookHistory[1];
-				
-				var RoanDate = new Date(bookHistory[2]*1000);
-				//대출일
-				row.insertCell(4).innerHTML = RoanDate.toLocaleString();
-				//상태
-				row.insertCell(5).innerHTML = GetReturnDate(RoanDate).toLocaleString();
+				historyRow.insertCell(3).innerHTML = bookHistory[1];
+				//대출자
+				var RoanDate = new Date(bookHistory[2] * 1000);
+				//대출/반납여부
+				var flag = bookHistory[3];
+                if (flag == 0) {
+					historyRow.insertCell(4).innerHTML = "대출";
+                } else {
+                    historyRow.insertCell(4).innerHTML = "반납";
+                }
+				//대출/반납일
+				historyRow.insertCell(5).innerHTML = RoanDate.toLocaleString();
 			}
+
+            // 내 책을 출력한다.
+			var tableMyBook = document.getElementById("myBooks");
 			
-			
+            for (var i = 0; i < listBook.length; i++) {
+				var book = listBook[i];
+				var LoanBook = IsLoanBook(book[1]);
+				console.log("loanBook: " + LoanBook);
+
+				if (LoanBook) {
+
+					var user = LoanBook[1];
+					var strAddress = document.getElementById("address").value;
+
+					if (user == strAddress) {
+                        var MybookRow = tableMyBook.insertRow();
+                        MybookRow.insertCell(0).innerHTML = i + 1;
+                        //책 이름
+                        MybookRow.insertCell(1).innerHTML = book[0];
+                        //책 아이디
+                        MybookRow.insertCell(2).innerHTML = book[1];
+                        //지은이
+                        MybookRow.insertCell(3).innerHTML = book[2];
+                        //출판사
+                        MybookRow.insertCell(4).innerHTML = book[3];
+                    }
+				}
+				console.log("history: " + listBookHistory);
+                for (var j = lengthHistory - 1; j >= 0; j--) {
+                    if (listBookHistory[j][0] == LoanBook[0]) {
+                        var myRoanDate = new Date(listBookHistory[j][2] * 1000);
+						MybookRow.insertCell(5).innerHTML = myRoanDate.toLocaleString();
+						MybookRow.insertCell(6).innerHTML = GetReturnDate(myRoanDate).toLocaleString();
+						
+                        return null;
+                    }
+                }
+            }
+			console.log("listBook: " + listBook + typeof (listBook));
+			console.log(listBook[0])
+
+
 			//완성된 배열을 화면에 표시한다.
-			var table = document.getElementById("tableBook");
+			var tableBook = document.getElementById("tableBook");
 			for (var i = 0; i < listBook.length; i++) {
 				var book = listBook[i];
-				var toString = book.toString();
-				console.log(toString);
-				var strArray = toString.split(',');
-				console.log(strArray);
-				
 
-
-				var row = table.insertRow();
+				var bookRow = tableBook.insertRow();
 				//인덱스
 				/*var newRadio = document.createElement("input");
 				newRadio.setAttribute("type", "radio");
                 newRadio.setAttribute("name", "chk_info");
                 newRadio.setAttribute("value", i+1);
 				*/
-                row.insertCell(0).innerHTML = i+1;
+                bookRow.insertCell(0).innerHTML = i+1;
 				//var row = row.insertCell(0);
 				//row.setAttribute("id", `row${i}`);
 				//var rowDom = document.getElementById(`row${i}`);
 				//rowDom.appendChild(newRadio);
                 //책 이름
-				row.insertCell(1).innerHTML = book[0];
+				bookRow.insertCell(1).innerHTML = book[0];
 				//책 아이디
-				row.insertCell(2).innerHTML = book[1];
+				bookRow.insertCell(2).innerHTML = book[1];
 				//지은이
-				row.insertCell(3).innerHTML = book[2];
+				bookRow.insertCell(3).innerHTML = book[2];
 				//출판사
-				row.insertCell(4).innerHTML = book[3];
+				bookRow.insertCell(4).innerHTML = book[3];
 
 				var LoanBook = IsLoanBook(book[1]);
 				
                 if (LoanBook) {
-                    row.insertCell(5).innerHTML = "대출불가";
-                    row.insertCell(6).innerHTML = LoanBook[1];
-                    row.insertCell(7).innerHTML = new Date(LoanBook[2] * 1000);
+                    bookRow.insertCell(5).innerHTML = "대출불가";
+                    bookRow.insertCell(6).innerHTML = LoanBook[1];
+                    bookRow.insertCell(7).innerHTML = new Date(LoanBook[2] * 1000);
                 } else {
-                    row.insertCell(5).innerHTML = "대출가능";
-					row.insertCell(6).innerHTML = "";
-                    row.insertCell(7).innerHTML = "";
+                    bookRow.insertCell(5).innerHTML = "대출가능";
+					bookRow.insertCell(6).innerHTML = "";
+                    bookRow.insertCell(7).innerHTML = "";
                 }
-				//대출자
-                //row.insertCell(6).innerHTML = "김영인";
-				//반납기한
-				//row.insertCell(7).innerHTML = book[4];
 				
 				
 			}
 		}
+
+		function IsBook(strBookID) {
+            for (var i = 0; i < listBook.length; i++) {
+                if (listBook[i][1] == strBookID) {
+					return true;
+                }
+            }
+			return false;
+        }
 		
 		function IsLoanBook(strBookID)
 		{
+			
+
 			var lengthHistory = vc.getNumOfBookHistory();
 			for (var j = lengthHistory-1; j >= 0; j--)
 			{
@@ -281,7 +337,7 @@
 	<h1>Welcome, This is Hustar Library.</h1>
 	<div id="nameContainer">
 		(입출력)My name is
-		<input type="text" id="address" value=""0x6126591f46f787a9cd192c13d8c904e90a32f8b9">
+		<input type="text" id="address" value="0x7fa21fa15ff028a0e922ed9bf72eed38fa144d2e">
 		<br>
 	</div>
 	<div id="passwordContainer">
@@ -302,7 +358,7 @@
 					<th class="tg-p7qa">No.</th>
 					<th class="tg-p7qa">도서명</th>
 					<th class="tg-p7qa">도서 ID</th>
-					<th class="tg-p7qa"> 지은이</th>
+					<th class="tg-p7qa">지은이</th>
 					<th class="tg-p7qa">출판사</th>
 					<th class="tg-rz9m">대출여부</th>
 					<th class="tg-rz9m">대출자</th>
@@ -310,16 +366,6 @@
 				</tr>
 			</thead>
 			<tbody>
-				<!--<tr>
-					<td class="tg-nb2d"> 1</td>
-					<td class="tg-nb2d">머신러닝 교과서 with 파이썬, 사이킷런, 텐서플로</td>
-					<td class="tg-nb2d">HS01012</td>
-					<td class="tg-nb2d">세바스찬</td>
-					<td class="tg-nb2d">길벗</td>
-					<td class="tg-baqh">대출불가</td>
-					<td class="tg-baqh">김영인</td>
-					<td class="tg-baqh">2020-07-10</td>
-				</tr>-->
 			</tbody>
 		</table>
 	</div>
@@ -330,28 +376,19 @@
 	</div>
 	<div id="myBooksContainer">
 		<h2>내 대출 현황</h2>
-		<table class="tg">
+		<table class="tg" id="myBooks">
 			<thead>
 				<tr>
 					<th class="tg-p7qa">No.</th>
 					<th class="tg-p7qa">도서명</th>
 					<th class="tg-p7qa">도서 ID</th>
-					<th class="tg-p7qa"> 지은이</th>
+					<th class="tg-p7qa">지은이</th>
 					<th class="tg-p7qa">출판사</th>
 					<th class="tg-rz9m">대출일</th>
 					<th class="tg-rz9m">반납기한</th>
 				</tr>
 			</thead>
 			<tbody>
-				<!--<tr>
-					<td class="tg-nb2d"><input type="radio" name="chk_info" value="1"> 1</td>
-					<td class="tg-nb2d">머신러닝 교과서 with 파이썬, 사이킷런, 텐서플로</td>
-					<td class="tg-nb2d">HS01012</td>
-					<td class="tg-nb2d">세바스찬</td>
-					<td class="tg-nb2d">길벗</td>
-					<td class="tg-baqh">2020-06-27</td>
-					<td class="tg-baqh">2020-07-10</td>
-				</tr>-->
 			</tbody>
 		</table>
 	</div>
@@ -369,19 +406,11 @@
 					<th class="tg-p7qa">도서명</th>
 					<th class="tg-p7qa">도서 ID</th>
 					<th class="tg-p7qa">대출자</th>
-					<th class="tg-rz9m">대출일</th>
-					<th class="tg-rz9m">상태</th>
+					<th class="tg-rz9m">대출/반납</th>
+					<th class="tg-rz9m">날짜</th>
 				</tr>
 			</thead>
 			<tbody>
-				<!--<tr>
-					<td class="tg-nb2d">1</td>
-					<td class="tg-nb2d">머신러닝 교과서 with 파이썬, 사이킷런, 텐서플로</td>
-					<td class="tg-nb2d">HS01012</td>
-					<td class="tg-nb2d">김영인</td>
-					<td class="tg-baqh">2020-06-27</td>
-					<td class="tg-baqh">2020-07-10</td>
-				</tr>-->
 			</tbody>
 		</table>
 	</div>
