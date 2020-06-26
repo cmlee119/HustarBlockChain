@@ -250,7 +250,7 @@
 		
 		function GetReturnDate(RoanDate)
 		{
-			return RoanDate.setDate(RoanDate.getDate() + 14);
+			return new Date(RoanDate.getFullYear(), RoanDate.getMonth(), RoanDate.getDate() + 14);
 		}
 		
 		function AddBook() {
