@@ -4,10 +4,10 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="../public/css/style.css">
-	<script type="text/javascript" src="./js/bignumber.min.js"></script>
-	<script type="text/javascript" src="./js/web3-light.js"></script>
-	<script type="text/javascript" src="./js/ABI.js"></script>
-	<script type="text/javascript" src="./js/CA.js"></script>
+	<script type="text/javascript" src="../public/js/bignumber.min.js"></script>
+	<script type="text/javascript" src="../public/js/web3-light.js"></script>
+	<script type="text/javascript" src="../public/js/ABI.js"></script>
+	<script type="text/javascript" src="../public/js/CA.js"></script>
 	<script type="text/javascript">
 		console.log('starting...');
 		//connect web3 and check if web3 is connected correctly
@@ -55,8 +55,17 @@
 		function Login() {
 			var strAddress = document.getElementById("address").value;
 			var strPassword = document.getElementById("password").value;
-			
-			var login = vc.Login(strAddress, strPassword);
+			console.log(strAddress);
+			console.log(strPassword);
+			try
+			{
+				var login = web3.personal.unlockAccount(strAddress, strPassword);
+			}
+			catch(error)
+			{
+				//처리
+				console.log("실패했습니다");
+			}
 			console.log(login);
 			
 			if(login == true)

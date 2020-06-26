@@ -4,6 +4,28 @@ var abi =
 		"constant": false,
 		"inputs": [
 			{
+				"name": "strBookID",
+				"type": "string"
+			},
+			{
+				"name": "strCustomerAddress",
+				"type": "string"
+			},
+			{
+				"name": "flag",
+				"type": "uint256"
+			}
+		],
+		"name": "addBookHistory",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"name": "_firstString",
 				"type": "string"
 			},
@@ -45,30 +67,26 @@ var abi =
 		"constant": true,
 		"inputs": [
 			{
-				"name": "",
+				"name": "_index",
 				"type": "uint256"
 			}
 		],
-		"name": "bookInfo",
+		"name": "getBookHistoryStruct",
 		"outputs": [
 			{
-				"name": "bookName",
+				"name": "",
 				"type": "string"
 			},
 			{
-				"name": "bookId",
+				"name": "",
 				"type": "string"
 			},
 			{
-				"name": "bookWriter",
-				"type": "string"
+				"name": "",
+				"type": "uint256"
 			},
 			{
-				"name": "bookPublisher",
-				"type": "string"
-			},
-			{
-				"name": "timestamp",
+				"name": "",
 				"type": "uint256"
 			}
 		],
@@ -101,10 +119,20 @@ var abi =
 			{
 				"name": "",
 				"type": "string"
-			},
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getNumOfBookHistory",
+		"outputs": [
 			{
 				"name": "",
-				"type": "uint256"
+				"type": "uint8"
 			}
 		],
 		"payable": false,
