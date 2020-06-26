@@ -236,10 +236,13 @@
 			console.log(strAddress);
 			console.log(strPassword);
 			
+			var strBookTitle = document.getElementById("TempbookTitle").value;
 			var strBookID = document.getElementById("TempbookID").value;
+			var strBookWriter = document.getElementById("TempbookWriter").value;
+			var strBookPublisher = document.getElementById("TempbookPublisher").value;
 			
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
-				vc.addBookStru(strBookID, strBookID + "ID", "작가" + strBookID, "출판사" + strBookID, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+				vc.addBookStru(strBookTitle, strBookID, strBookWriter, strBookPublisher, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
 		}
 		/*
@@ -255,7 +258,7 @@
 	<h1>Welcome, This is Hustar Library.</h1>
 	<div id="nameContainer">
 		(입출력)My name is
-		<input type="text" id="address" value="0x7fa21fa15ff028a0e922ed9bf72eed38fa144d2e">
+		<input type="text" id="address" value=""0x6126591f46f787a9cd192c13d8c904e90a32f8b9">
 		<br>
 	</div>
 	<div id="passwordContainer">
@@ -364,8 +367,13 @@
 		<br>
 		<br>
 		테스트용 책 등록하기 (책 이름겸 아이디)
-		<input type="text" id="TempbookID" value="책1">
-		<button onClick="AddBook()">책 등록</button>
+		<br>
+		<input type="text" id="TempbookTitle" placeholder = "책 제목" value=>
+		<input type="text" id="TempbookID" placeholder = "책 ID" value=>
+		<input type="text" id="TempbookWriter" placeholder = "책 지은이" value=>
+		<input type="text" id="TempbookPublisher" placeholder = "책 출판사" value=>
+		<br>
+		<button onClick="AddBook()">책 등록하기</button>
 		<br>
 		<br>
 		<br>
