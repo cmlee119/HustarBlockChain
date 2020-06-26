@@ -92,6 +92,12 @@
 			
 			console.log(strBookID);
 			
+			if(null != IsLoanBook(strBookID))
+			{
+				alert("이미 대출중인 책입니다.")
+				return;
+			}
+
 			if (web3.personal.unlockAccount(strAddress, strPassword)) {
 				vc.addBookHistory(strBookID, strAddress, 0, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
 			}
@@ -106,9 +112,22 @@
 			
 			console.log(strBookID);
 			
-			if (web3.personal.unlockAccount(strAddress, strPassword)) {
-				vc.addBookHistory(strBookID, strAddress, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+			var book = IsLoanBook(strBookID);
+			if(null == book)
+			{
+				//대출중인 책이 아닌경우
+				alert("이 책은 대출중이 아닙니다.")
+				return;
 			}
+			if(book[1] != strAddress)
+			{
+				alert("다른 사람이 대출중인 책입니다.")
+				return;
+			}
+			
+			//if (web3.personal.unlockAccount(strAddress, strPassword)) {
+			//	vc.addBookHistory(strBookID, strAddress, 1, { from: strAddress, gas: 2000000 }, function (err, result) { if (!err) alert("트랜잭션이 성공적으로 전송되었습니다.|n" + result) });
+			//}
 		}
 
 		//도서목록보기
@@ -183,24 +202,12 @@
 				//출판사
 				row.insertCell(4).innerHTML = book[3];
 
-				var isLoan = false;
-				var j;
-                for (j = lengthHistory-1; j >= 0; j--)
-				{
-					if(listBookHistory[j][0] == book[1])
-					{
-						console.log("test : " + listBookHistory[j][3]);
-						if (listBookHistory[j][3] == 0) {
-							isLoan = true;
-						}
-						break;
-					}
-				}
+				var LoanBook = IsLoanBook(book[1]);
 				
-                if (isLoan == true) {
+                if (LoanBook) {
                     row.insertCell(5).innerHTML = "대출불가";
-                    row.insertCell(6).innerHTML = listBookHistory[j][1];
-                    row.insertCell(7).innerHTML = new Date(listBookHistory[j][2] * 1000);
+                    row.insertCell(6).innerHTML = LoanBook[1];
+                    row.insertCell(7).innerHTML = new Date(LoanBook[2] * 1000);
                 } else {
                     row.insertCell(5).innerHTML = "대출가능";
 					row.insertCell(6).innerHTML = "";
@@ -212,6 +219,22 @@
 				//row.insertCell(7).innerHTML = book[4];
 				
 				
+			}
+		}
+		
+		function IsLoanBook(strBookID)
+		{
+			var lengthHistory = vc.getNumOfBookHistory();
+			for (var j = lengthHistory-1; j >= 0; j--)
+			{
+				if(listBookHistory[j][0] == strBookID)
+				{
+					console.log("test : " + listBookHistory[j][3]);
+					if (listBookHistory[j][3] == 0) {
+						return listBookHistory[j];
+					}
+					return null;
+				}
 			}
 		}
 		
