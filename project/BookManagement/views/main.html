@@ -130,7 +130,7 @@
 			}
 			
 			var tableHistory = document.getElementById("tableBookHistory");
-			for(var i = lengthHistory-1; i >= 0 ; i--) {
+            for (var i = 0; i < lengthHistory ; i++) {
 				var bookHistory = listBookHistory[i];
 				//대출이력 화면 표시부분
 				var row = tableHistory.insertRow();
@@ -182,30 +182,33 @@
 				row.insertCell(3).innerHTML = book[2];
 				//출판사
 				row.insertCell(4).innerHTML = book[3];
-				
-				row.insertCell(5);
-				
-				for(var j = 0; j < lengthHistory; j++)
+
+				var isLoan = false;
+				var j;
+                for (j = lengthHistory-1; j >= 0; j--)
 				{
 					if(listBookHistory[j][0] == book[1])
 					{
-						if(listBookHistory[j][3] == 0)
-						{
-							console.log(listBookHistory[j][4]);
-							row.insertCell(6).innerHTML = new Date(listBookHistory[j][2]*1000);
-							break;
+						console.log("test : " + listBookHistory[j][3]);
+						if (listBookHistory[j][3] == 0) {
+							isLoan = true;
 						}
+						break;
 					}
 				}
-				//대출여부
-                if (book[4] != null) {
-					row.insertCell(5).innerHTML = "대출불가"
+				
+                if (isLoan == true) {
+                    row.insertCell(5).innerHTML = "대출불가";
+                    row.insertCell(6).innerHTML = listBookHistory[j][1];
+                    row.insertCell(7).innerHTML = new Date(listBookHistory[j][2] * 1000);
                 } else {
-                    row.insertCell(5).innerHTML = "대출가능"
+                    row.insertCell(5).innerHTML = "대출가능";
+					row.insertCell(6).innerHTML = "";
+                    row.insertCell(7).innerHTML = "";
                 }
 				//대출자
                 //row.insertCell(6).innerHTML = "김영인";
-				//반납예정일
+				//반납기한
 				//row.insertCell(7).innerHTML = book[4];
 				
 				
@@ -252,7 +255,7 @@
 	<h1>Welcome, This is Hustar Library.</h1>
 	<div id="nameContainer">
 		(입출력)My name is
-		<input type="text" id="address" value="0x9cff0442793c48e86a0d01534b85237f5428d1b0">
+		<input type="text" id="address" value="0x7fa21fa15ff028a0e922ed9bf72eed38fa144d2e">
 		<br>
 	</div>
 	<div id="passwordContainer">
@@ -277,7 +280,7 @@
 					<th class="tg-p7qa">출판사</th>
 					<th class="tg-rz9m">대출여부</th>
 					<th class="tg-rz9m">대출자</th>
-					<th class="tg-rz9m">반납예정일</th>
+					<th class="tg-rz9m">반납기한</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -310,7 +313,7 @@
 					<th class="tg-p7qa"> 지은이</th>
 					<th class="tg-p7qa">출판사</th>
 					<th class="tg-rz9m">대출일</th>
-					<th class="tg-rz9m">반납예정일</th>
+					<th class="tg-rz9m">반납기한</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -328,7 +331,7 @@
 	</div>
 	<div id="checkInContainer">
 		<br>
-		<input type="text" id="ReturnBookID" value="도서ID">
+		<input type="text" id="returnBookID" value="도서ID">
 		<button onclick="BookReturn()">반납하기</button>
 	</div>
 	<div id="BookHistoryContainer">
