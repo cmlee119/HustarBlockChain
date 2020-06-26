@@ -117,7 +117,9 @@
 				listBook[i] = book;
 			}
 			
-			//각 책별로 최종적으로 대출인지 반납인지 검새한다.
+            listBook = ["test, 사이킷런, 텐서플로", "HS01012", "세바스찬", "길벗", "2020-06-27"]
+
+			//각 책별로 최종적으로 대출인지 반납인지 검색한다.
 			var tableHistory = document.getElementById("tableBookHistory");
 			var lengthHistory = vc.getNumOfBookHistory();
 			console.log("lengthHistory().length : " + lengthHistory);
@@ -150,7 +152,7 @@
 			var table = document.getElementById("tableBook");
 			for (var i = 0; i < lengthBook; i++) {
 				var book = listBook[i];
-				var row = table.insertRow();
+				var row = table.insertRow(1);
 				//책 아이디
 				row.insertCell(0).innerHTML = book[0];
 				//책 이름
@@ -206,7 +208,7 @@
 	</div>
 	<div id="booksContainer">
 		<h2>도서 현황</h2>
-		<table class="tg">
+		<table class="tg" id="tableBook">
 			<thead>
 				<tr>
 					<th class="tg-p7qa">No.</th>
