@@ -3,11 +3,11 @@
 
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="../public/css/style.css">
-	<script type="text/javascript" src="../public/js/bignumber.min.js"></script>
-	<script type="text/javascript" src="../public/js/web3-light.js"></script>
-	<script type="text/javascript" src="../public/js/ABI.js"></script>
-	<script type="text/javascript" src="../public/js/CA.js"></script>
+	<link rel="stylesheet" href="./css/style.css">
+	<script type="text/javascript" src="./js/bignumber.min.js"></script>
+	<script type="text/javascript" src="./js/web3-light.js"></script>
+	<script type="text/javascript" src="./js/ABI.js"></script>
+	<script type="text/javascript" src="./js/CA.js"></script>
 	<script type="text/javascript">
 		console.log('starting...');
 		//connect web3 and check if web3 is connected correctly
@@ -24,6 +24,7 @@
 			console.log("not connected")
 		}
 		var vc = web3.eth.contract(abi).at(CA);
+		console.log(vc);
 
 		//크리에이트 어카운트
 		/*function CreateAccount() {
@@ -109,65 +110,91 @@
 			var listBook = new Array();
 			
 			//도서 목록을 배열에 담는다.
-			var lengthBook = vc.getNumOfBooks();
-			console.log("showList().length : " + lengthBook);
+   //         var lengthBook = vc.getNumOfBooks();
+			//console.log("showList().length : " + lengthBook);
 			
-			for (var i = 0; i < lengthBook; i++) {
-				var book = vc.getbookStruct(i);
-				listBook[i] = book;
-			}
-			/*
-            listBook = ["test, 사이킷런, 텐서플로", "HS01012", "세바스찬", "길벗", "2020-06-27"]
+			//for (var i = 0; i < lengthBook; i++) {
+			//	var book = vc.getbookStruct(i);
+			//	listBook[i] = book;
+			//}
+			
+            listBook = [["test", "HS01012", "세바스찬", "길벗", "2020-06-27"],]
 
 			//각 책별로 최종적으로 대출인지 반납인지 검색한다.
-			var tableHistory = document.getElementById("tableBookHistory");
-			var lengthHistory = vc.getNumOfBookHistory();
-			console.log("lengthHistory().length : " + lengthHistory);
-			for (var i = lengthHistory-1; i >= 0; i--) {
-				var bookHistory = vc.getBookHistoryStruct(i);
+			//var tableHistory = document.getElementById("tableBookHistory");
+			//var lengthHistory = vc.getNumOfBookHistory();
+			//console.log("lengthHistory().length : " + lengthHistory);
+			//for (var i = lengthHistory-1; i >= 0; i--) {
+			//	var bookHistory = vc.getBookHistoryStruct(i);
 				
-				//대출이력 화면 표시부분
-				var row = tableHistory.insertRow();
-				//책 아이디
-				row.insertCell(0).innerHTML = bookHistory[0];
-				//대출자 Address
-				row.insertCell(1).innerHTML = bookHistory[1];
-				//대출일
-				row.insertCell(2).innerHTML = new Date(bookHistory[2]*1000);
-				//플래그(대출, 반납)
-				var strTemp;
-				if(bookHistory[3] == 0)
-				{
-					strTemp = "대출";
-				}
-				else
-				{
-					strTemp = "반납";
-				}
-				row.insertCell(3).innerHTML = strTemp;
-			}
-			*/
+			//	//대출이력 화면 표시부분
+			//	var row = tableHistory.insertRow();
+			//	//책 아이디
+			//	row.insertCell(0).innerHTML = bookHistory[0];
+			//	//대출자 Address
+			//	row.insertCell(1).innerHTML = bookHistory[1];
+			//	//대출일
+			//	row.insertCell(2).innerHTML = new Date(bookHistory[2]*1000);
+			//	//플래그(대출, 반납)
+			//	var strTemp;
+			//	if(bookHistory[3] == 0)
+			//	{
+			//		strTemp = "대출";
+			//	}
+			//	else
+			//	{
+			//		strTemp = "반납";
+			//	}
+			//	row.insertCell(3).innerHTML = strTemp;
+			//}
+			
 			
 			//완성된 배열을 화면에 표시한다.
 			var table = document.getElementById("tableBook");
-			for (var i = 0; i < lengthBook; i++) {
+			for (var i = 0; i < 1; i++) {
 				var book = listBook[i];
+				var toString = book.toString();
+				console.log(toString);
+				var strArray = toString.split(',');
+				console.log(strArray);
+				
+
+
 				var row = table.insertRow(1);
-				//책 순서
-				row.insertCell(0).innerHTML = i + 1;
-				//책 이름
+				//인덱스
+				var newRadio = document.createElement("input");
+				newRadio.setAttribute("type", "radio");
+                newRadio.setAttribute("name", "chk_info");
+                newRadio.setAttribute("value", i+1);
+
+                row.insertCell(0).innerHTML = i+1;
+				//var row = row.insertCell(0);
+				//row.setAttribute("id", `row${i}`);
+				//var rowDom = document.getElementById(`row${i}`);
+				//rowDom.appendChild(newRadio);
+                //책 이름
 				row.insertCell(1).innerHTML = book[0];
 				//책 아이디
 				row.insertCell(2).innerHTML = book[1];
-				//작가
+				//지은이
 				row.insertCell(3).innerHTML = book[2];
 				//출판사
 				row.insertCell(4).innerHTML = book[3];
+				//대출여부
+                if (book[4] != null) {
+					row.insertCell(5).innerHTML = "대출불가"
+                } else {
+                    row.insertCell(5).innerHTML = "대출가능"
+                }
+				//대출자
+                row.insertCell(6).innerHTML = "김영인";
+				//반납예정일
+				row.insertCell(7).innerHTML = book[4];
 				
-				/*for(var i = lengthHistory-1; i >= 0; i--)
-				{
+				//for(var i = lengthHistory-1; i >= 0; i--)
+				//{
 					
-				}*/
+				//}
 			}
 		}
 		function AddBook() {
@@ -225,7 +252,7 @@
 			</thead>
 			<tbody>
 				<!--<tr>
-					<td class="tg-nb2d"><input type="radio" name="chk_info" value="1"> 1</td>
+					<td class="tg-nb2d"> 1</td>
 					<td class="tg-nb2d">머신러닝 교과서 with 파이썬, 사이킷런, 텐서플로</td>
 					<td class="tg-nb2d">HS01012</td>
 					<td class="tg-nb2d">세바스찬</td>
