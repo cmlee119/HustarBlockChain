@@ -212,12 +212,11 @@
 				}
 				console.log("history: " + listBookHistory);
                 for (var j = lengthHistory - 1; j >= 0; j--) {
-                    if (listBookHistory[j][0] == LoanBook[0]) {
+                    if (null != LoanBook && listBookHistory[j][0] == LoanBook[0] ) {
                         var myRoanDate = new Date(listBookHistory[j][2] * 1000);
 						MybookRow.insertCell(5).innerHTML = myRoanDate.toLocaleString();
 						MybookRow.insertCell(6).innerHTML = GetReturnDate(myRoanDate).toLocaleString();
-						
-                        return null;
+						break;
                     }
                 }
             }
@@ -255,8 +254,9 @@
 				
                 if (LoanBook) {
                     bookRow.insertCell(5).innerHTML = "대출불가";
-                    bookRow.insertCell(6).innerHTML = LoanBook[1];
-                    bookRow.insertCell(7).innerHTML = new Date(LoanBook[2] * 1000);
+					bookRow.insertCell(6).innerHTML = LoanBook[1];
+                    var booklistdate = new Date(LoanBook[2] * 1000)
+                    bookRow.insertCell(7).innerHTML = GetReturnDate(booklistdate).toLocaleString();
                 } else {
                     bookRow.insertCell(5).innerHTML = "대출가능";
 					bookRow.insertCell(6).innerHTML = "";
@@ -418,7 +418,7 @@
 		<br>
 		<br>
 		<br>
-		테스트용 책 등록하기 (책 이름겸 아이디)
+		책 등록하기
 		<br>
 		<input type="text" id="TempbookTitle" placeholder = "책 제목" value=>
 		<input type="text" id="TempbookID" placeholder = "책 ID" value=>
@@ -429,12 +429,12 @@
 		<br>
 		<br>
 		<br>
-		테스트용 책 대출,반납하기
+		<!--테스트용 책 대출,반납하기
 		<br>
 		책 ID
 		<input type="text" id="TargetBookID" value="책1">
 		<button onClick="BookLoan()">BookLoan</button>
-		<button onClick="BookReturn()">BookReturn</button>
+		<button onClick="BookReturn()">BookReturn</button>-->
 	</div>
 	<br>
 	<br>
